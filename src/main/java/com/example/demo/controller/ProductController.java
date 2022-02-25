@@ -41,7 +41,7 @@ public class ProductController {
 		return service.getProductByID(id);
 	}
 	
-	@GetMapping("/productByName/{name}")
+	@GetMapping("/products/{name}")
 	public List<Product> findProductByName(@PathVariable String name) {
 		return service.getProductByName(name);
 	}
