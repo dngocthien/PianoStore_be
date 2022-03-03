@@ -14,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 
 	List<Product> findByNameContaining(String name);
 
+	void deleteByName(String name);
+
 }

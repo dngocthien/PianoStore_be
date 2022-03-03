@@ -39,9 +39,9 @@ public class ProductService {
 		return repository.findByBrand(brand);
 	}
 	
-	public String deleteProduct(int id) {
-		repository.deleteById(id);
-		return (id + " was remove");
+	public String deleteProduct(String name) {
+		repository.deleteByName(name);
+		return (name + " was remove");
 	}
 	
 	public Product updateProduct(Product product) {

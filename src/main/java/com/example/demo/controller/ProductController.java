@@ -3,7 +3,10 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +19,7 @@ import com.example.demo.entity.Product;
 import com.example.demo.service.ProductService;
 
 @RestController
+@CrossOrigin
 public class ProductController {
 	
 	@Autowired
@@ -51,9 +55,10 @@ public class ProductController {
 		return service.getProductByBrand(brand);
 	}
 	
-	@DeleteMapping("/delete/{id}")
-	public String deleteProduct(@PathVariable int id) {
-		return service.deleteProduct(id);
+	@DeleteMapping("/delete/{name}")
+	@Transactional
+	public String deleteProduct(@PathVariable String name) {
+		return service.deleteProduct(name);
 	}
 	
 	@PutMapping("/update")
