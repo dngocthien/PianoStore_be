@@ -13,7 +13,7 @@ public class Cart {
 	private int ID;
 	private String name;
 	private String address;
-	private int phone;
+	private String phone;
 	private String message;
 	private boolean bank;
 	private String date;
@@ -23,7 +23,7 @@ public class Cart {
 	public Cart() {
 	}
 
-	public Cart(int iD, String name, String address, int phone, String message, boolean bank, String date, int status) {
+	public Cart(int iD, String name, String address, String phone, String message, boolean bank, String date, int status) {
 		super();
 		ID = iD;
 		this.name = name;
@@ -71,11 +71,11 @@ public class Cart {
 		this.address = address;
 	}
 
-	public int getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
-	public void setPhone(int phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
