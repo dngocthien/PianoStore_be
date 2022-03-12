@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,10 @@ public class ProductService {
 		existing.setName(product.getName());
 		existing.setPrice(product.getPrice());
 		return repository.save(existing);
+	}
+
+	public List<String> getAllBrand() {
+		return repository.findDistinctBrand();
 	}
 
 }

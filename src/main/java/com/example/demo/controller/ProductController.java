@@ -35,7 +35,7 @@ public class ProductController {
 	@PostMapping("/addProduct")
 	public Product addProduct(@RequestParam("name") String name, @RequestParam("brand") String brand,
 			@RequestParam("price") int price, @RequestParam("remain") boolean remain,
-			@RequestParam("file") MultipartFile file) throws IOException {
+			@RequestParam(value="file", required = false) MultipartFile file) throws IOException {
 
 		Product product = new Product();
 
@@ -43,7 +43,9 @@ public class ProductController {
 		product.setBrand(brand);
 		product.setPrice(price);
 		product.setRemain(remain);
-		product.setImage(file.getBytes());
+		if (file != null) {
+			product.setImage(file.getBytes());
+		}
 
 		return service.saveProduct(product);
 	}
@@ -69,30 +71,40 @@ public class ProductController {
 		return service.getProductByBrand(brand).stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
+	@GetMapping("/brands")
+	public List<String> findAllBrand() {
+		return service.getAllBrand();
+	}
+
 	@DeleteMapping("/delete/{name}")
 	@Transactional
 	public String deleteProduct(@PathVariable String name) {
 		return service.deleteProduct(name);
 	}
 
-	@PutMapping("/updateProduct")
-	public Product updateProduct(@RequestParam("existing") String existing, @RequestParam("name") String name,
+	@PostMapping("/updateProduct")
+	public Product updateProduct(@RequestParam("name") String name,
 			@RequestParam("brand") String brand, @RequestParam("price") int price,
-			@RequestParam("remain") boolean remain, @RequestParam("file") MultipartFile file) throws IOException {
+			@RequestParam("remain") boolean remain, @RequestParam( value="file", required = false) MultipartFile file) throws IOException {
 
-		Product product = service.getProductByID(existing);
+		Product product = service.getProductByID(name);
 
 		product.setBrand(brand);
 		product.setPrice(price);
 		product.setRemain(remain);
-		product.setImage(file.getBytes());
+		if (file != null) {
+			product.setImage(file.getBytes());
+		}
 
 		return service.saveProduct(product);
 	}
 
 	private ProductResponse mapToFileResponse(Product product) {
-		String uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/images/").path(product.getName())
-				.toUriString();
+		String uri = null;
+		if(product.getImage()!=null) {
+			uri  = ServletUriComponentsBuilder.fromCurrentContextPath().path("/images/").path(product.getName())
+					.toUriString();
+		}
 		return new ProductResponse(product.getName(), product.getBrand(), product.getPrice(), product.getRemain(), uri);
 	}
 }
