@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,12 +51,11 @@ public class ProductService {
 		return repository.findAll();
 	}
 
-	public Product getProductByID(String id) {
-		return repository.findByName(id);
+	public Product getProductByID(int id) {
+		return repository.findById(id).orElse(null);
 	}
 
 	public List<Product> getProductByName(String name) {
-//		return repository.findByName(name);
 		return repository.findByNameContaining(name);
 	}
 

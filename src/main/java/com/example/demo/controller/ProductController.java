@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,17 +54,19 @@ public class ProductController {
 		return service.getAllProducts().stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
-	@GetMapping(value = "/images/{name}", produces = MediaType.IMAGE_JPEG_VALUE)
-	public @ResponseBody byte[] getImage(@PathVariable String name) throws IOException {
-		Product p = service.getProductByID(name);
+	@GetMapping(value = "/images/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public @ResponseBody byte[] getImage(@PathVariable int id) throws IOException {
+		Product p = service.getProductByID(id);
 		return p.getImage();
 	}
 
+	@Transactional
 	@GetMapping("/products/{name}")
 	public List<ProductResponse> findProductByName(@PathVariable String name) {
 		return service.getProductByName(name).stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
+	@Transactional
 	@GetMapping("/productByBrand/{brand}")
 	public List<ProductResponse> findProductByBrand(@PathVariable String brand) {
 		return service.getProductByBrand(brand).stream().map(this::mapToFileResponse).collect(Collectors.toList());
@@ -83,12 +84,12 @@ public class ProductController {
 	}
 
 	@PostMapping("/updateProduct")
-	public Product updateProduct(@RequestParam("name") String name,
+	public Product updateProduct(@RequestParam("id") int id, @RequestParam("name") String name,
 			@RequestParam("brand") String brand, @RequestParam("price") int price,
 			@RequestParam("remain") boolean remain, @RequestParam( value="file", required = false) MultipartFile file) throws IOException {
 
-		Product product = service.getProductByID(name);
-
+		Product product = service.getProductByID(id);
+		product.setName(name);
 		product.setBrand(brand);
 		product.setPrice(price);
 		product.setRemain(remain);
@@ -102,9 +103,9 @@ public class ProductController {
 	private ProductResponse mapToFileResponse(Product product) {
 		String uri = null;
 		if(product.getImage()!=null) {
-			uri  = ServletUriComponentsBuilder.fromCurrentContextPath().path("/images/").path(product.getName())
+			uri  = ServletUriComponentsBuilder.fromCurrentContextPath().path("/images/").path(product.getID()+"")
 					.toUriString();
 		}
-		return new ProductResponse(product.getName(), product.getBrand(), product.getPrice(), product.getRemain(), uri);
+		return new ProductResponse(product.getID() ,product.getName(), product.getBrand(), product.getPrice(), product.getRemain(), uri);
 	}
 }

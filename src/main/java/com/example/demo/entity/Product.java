@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
@@ -9,6 +10,8 @@ import javax.persistence.Table;
 @Table
 public class Product {
 	@Id
+	@GeneratedValue
+	private int ID;
 	private String name;
 	private String brand;
 	private int price;
@@ -19,13 +22,22 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(String name, String brand, int price, boolean remain, byte[] image) {
+	public Product(int iD, String name, String brand, int price, boolean remain, byte[] image) {
 		super();
+		ID = iD;
 		this.name = name;
 		this.brand = brand;
 		this.price = price;
 		this.remain = remain;
 		this.image = image;
+	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
 	}
 
 	public byte[] getImage() {

@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ProductResponse {
+	private int id;
 	private String name;
 	private String brand;
 	private int price;
@@ -13,15 +14,25 @@ public class ProductResponse {
 		super();
 	}
 	
-	public ProductResponse(String name, String brand, int price, boolean remain, String image) {
+	public ProductResponse(int id, String name, String brand, int price, boolean remain, String image) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.brand = brand;
 		this.price = price;
 		this.remain = remain;
 		this.image = image;
 	}
+
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
