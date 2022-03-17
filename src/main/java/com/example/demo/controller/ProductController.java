@@ -38,8 +38,8 @@ public class ProductController {
 
 		Product product = new Product();
 
-		product.setName(name);
-		product.setBrand(brand);
+		product.setName(name.toUpperCase());
+		product.setBrand(brand.toUpperCase());
 		product.setPrice(price);
 		product.setRemain(remain);
 		if (file != null) {
@@ -63,7 +63,7 @@ public class ProductController {
 	@Transactional
 	@GetMapping("/products/{name}")
 	public List<ProductResponse> findProductByName(@PathVariable String name) {
-		return service.getProductByName(name).stream().map(this::mapToFileResponse).collect(Collectors.toList());
+		return service.getProductByName(name.toUpperCase()).stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
 	@Transactional
