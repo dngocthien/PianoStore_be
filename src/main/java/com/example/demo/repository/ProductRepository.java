@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.example.demo.entity.Product;
 
+import javax.transaction.Transactional;
+
 public interface ProductRepository extends JpaRepository<Product, Integer>{
 
 	Product findByName(String name);
@@ -20,8 +22,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 	@Query("SELECT DISTINCT brand FROM Product")
 	List<String> findDistinctBrand();
 
-//	@Query("SELECT p FROM Product p WHERE p.price > 0 ORDER BY p.price LIMIT 8")
-	@Query(value="SELECT * from Product p ORDER BY p.price LIMIT 8", nativeQuery = true)
+	@Transactional
+	@Query("SELECT p FROM Product p WHERE p.price > 0 ORDER BY p.price")
 	List<Product> findCheap();
+//	@Query(value="SELECT p from Product p ORDER BY p.price LIMIT 0, 8", nativeQuery = true)
 
 }
