@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.entity.Product;
-import com.example.demo.entity.ProductResponse;
+import com.example.demo.entity.ProductDto;
 import com.example.demo.service.ProductService;
 
 @RestController
@@ -50,7 +50,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/products")
-	public List<ProductResponse> findAllProduct() {
+	public List<ProductDto> findAllProduct() {
 		return service.getAllProducts().stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
@@ -62,19 +62,24 @@ public class ProductController {
 
 	@Transactional
 	@GetMapping("/products/{name}")
-	public List<ProductResponse> findProductByName(@PathVariable String name) {
+	public List<ProductDto> findProductByName(@PathVariable String name) {
 		return service.getProductByName(name.toUpperCase()).stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
 	@Transactional
 	@GetMapping("/productByBrand/{brand}")
-	public List<ProductResponse> findProductByBrand(@PathVariable String brand) {
+	public List<ProductDto> findProductByBrand(@PathVariable String brand) {
 		return service.getProductByBrand(brand).stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
 	@GetMapping("/brands")
 	public List<String> findAllBrand() {
 		return service.getAllBrand();
+	}
+
+	@GetMapping("/products/cheap")
+	public List<ProductDto> findCheapProducts() {
+		return service.getCheapProducts().stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
 	@DeleteMapping("/delete/{name}")
@@ -96,16 +101,15 @@ public class ProductController {
 		if (file != null) {
 			product.setImage(file.getBytes());
 		}
-
 		return service.saveProduct(product);
 	}
 
-	private ProductResponse mapToFileResponse(Product product) {
+	private ProductDto mapToFileResponse(Product product) {
 		String uri = null;
 		if(product.getImage()!=null) {
 			uri  = ServletUriComponentsBuilder.fromCurrentContextPath().path("/images/").path(product.getID()+"")
 					.toUriString();
 		}
-		return new ProductResponse(product.getID() ,product.getName(), product.getBrand(), product.getPrice(), product.getRemain(), uri);
+		return new ProductDto(product.getID() ,product.getName(), product.getBrand(), product.getPrice(), product.getRemain(), uri);
 	}
 }

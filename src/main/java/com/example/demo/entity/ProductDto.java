@@ -3,18 +3,18 @@ package com.example.demo.entity;
 import lombok.Data;
 
 @Data
-public class ProductResponse {
+public class ProductDto {
 	private int id;
 	private String name;
 	private String brand;
 	private int price;
 	private boolean remain;
 	private String image;
-	public ProductResponse() {
+	public ProductDto() {
 		super();
 	}
 	
-	public ProductResponse(int id, String name, String brand, int price, boolean remain, String image) {
+	public ProductDto(int id, String name, String brand, int price, boolean remain, String image) {
 		super();
 		this.id = id;
 		this.name = name;

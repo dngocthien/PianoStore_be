@@ -20,4 +20,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 	@Query("SELECT DISTINCT brand FROM Product")
 	List<String> findDistinctBrand();
 
+//	@Query("SELECT p FROM Product p WHERE p.price > 0 ORDER BY p.price LIMIT 8")
+	@Query(value="SELECT * from Product p ORDER BY p.price LIMIT 8", nativeQuery = true)
+	List<Product> findCheap();
+
 }
