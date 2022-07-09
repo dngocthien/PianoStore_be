@@ -18,7 +18,7 @@ public class CartService {
 	}
 	
 	public List<Cart> getAllCart() {
-		return repository.findAll();
+		return repository.findAllByDate();
 	}
 	
 	public Cart getCartByID(int id) {
