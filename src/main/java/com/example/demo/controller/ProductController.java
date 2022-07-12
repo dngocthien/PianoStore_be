@@ -8,20 +8,13 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.entity.Product;
-import com.example.demo.entity.ProductDto;
+import com.example.demo.dto.ProductDto;
 import com.example.demo.service.ProductService;
 
 @RestController
@@ -31,7 +24,7 @@ public class ProductController {
 	@Autowired
 	private ProductService service;
 
-	@PostMapping("/addProduct")
+	@PostMapping("/products")
 	public Product addProduct(@RequestParam("name") String name, @RequestParam("brand") String brand,
 			@RequestParam("price") int price, @RequestParam("remain") boolean remain,
 			@RequestParam(value="file", required = false) MultipartFile file) throws IOException {
@@ -67,12 +60,12 @@ public class ProductController {
 	}
 
 	@Transactional
-	@GetMapping("/productByBrand/{brand}")
+	@GetMapping("/products/brand/{brand}")
 	public List<ProductDto> findProductByBrand(@PathVariable String brand) {
 		return service.getProductByBrand(brand).stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
-	@GetMapping("/brands")
+	@GetMapping("/products/brands")
 	public List<String> findAllBrand() {
 		return service.getAllBrand();
 	}
@@ -82,13 +75,13 @@ public class ProductController {
 		return service.getCheapProducts().stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
-	@DeleteMapping("/delete/{name}")
+	@DeleteMapping("/products/{name}")
 	@Transactional
 	public String deleteProduct(@PathVariable String name) {
 		return service.deleteProduct(name);
 	}
 
-	@PostMapping("/updateProduct")
+	@PutMapping("/products")
 	public Product updateProduct(@RequestParam("id") int id, @RequestParam("name") String name,
 			@RequestParam("brand") String brand, @RequestParam("price") int price,
 			@RequestParam("remain") boolean remain, @RequestParam( value="file", required = false) MultipartFile file) throws IOException {
