@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -13,7 +12,7 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Userr {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

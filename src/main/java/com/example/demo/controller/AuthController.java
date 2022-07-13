@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.dto.RoleUserForm;
 import com.example.demo.entity.Role;
-import com.example.demo.entity.User;
+import com.example.demo.entity.Userr;
 import com.example.demo.iservices.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,18 +31,18 @@ public class AuthController {
     private IUserService userService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<Userr>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
     @GetMapping("/users/{name}")
-    public ResponseEntity<User> getUserByName(@PathVariable String name) {
+    public ResponseEntity<Userr> getUserByName(@PathVariable String name) {
         return ResponseEntity.ok().body(userService.getUserByName(name));
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
-        return ResponseEntity.ok().body(userService.saveUser(user));
+    public ResponseEntity<Userr> saveUser(@RequestBody Userr userr) {
+        return ResponseEntity.ok().body(userService.saveUser(userr));
     }
 
     @PostMapping("/roles")
@@ -66,12 +66,12 @@ public class AuthController {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
                 String username = decodedJWT.getSubject();
-                User user = userService.getUser(username);
+                Userr userr = userService.getUser(username);
                 String access_token = JWT.create()
-                        .withSubject(user.getUsername())
+                        .withSubject(userr.getUsername())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
-                        .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.joining()))
+                        .withClaim("roles", userr.getRoles().stream().map(Role::getName).collect(Collectors.joining()))
                         .sign(algorithm);
 
 //        response.setHeader("access_token", access_token);
