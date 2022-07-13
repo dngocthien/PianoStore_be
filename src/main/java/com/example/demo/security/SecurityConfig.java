@@ -1,10 +1,10 @@
 package com.example.demo.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,10 +14,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+@CrossOrigin
+//@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -45,18 +47,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/login/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/token/refresh").permitAll();
 
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/products/**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/products/**").permitAll();
+        http.authorizeRequests().antMatchers( "/users/**").permitAll();
 
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/carts/**").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers("/products/**").permitAll();
+
+        http.authorizeRequests().antMatchers( "/carts/**").permitAll();
+//        http.authorizeRequests().antMatchers( "/carts/**").hasAnyAuthority("ROLE_ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthFilter);
         http.addFilterBefore(new CustomAuthorFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
-//    @Bean
-//    @Override
-//    public AuthenticationManager authenticationManager() throws Exception{
-//        return super.authenticationManager();
-//    }
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManager() throws Exception{
+        return super.authenticationManager();
+    }
 }

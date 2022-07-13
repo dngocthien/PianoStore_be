@@ -3,6 +3,8 @@ package com.example.demo.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Data
 public class CustomAuthenFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
 
@@ -33,7 +36,9 @@ public class CustomAuthenFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        System.out.println(username+":"+password+":");
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("admin", "admin");
         return authenticationManager.authenticate(authenticationToken);
     }
 
@@ -55,6 +60,11 @@ public class CustomAuthenFilter extends UsernamePasswordAuthenticationFilter {
 
 //        response.setHeader("access_token", access_token);
 //        response.setHeader("refresh_token", refresh_token);
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "authorization, content-type, xsrf-token");
+        response.addHeader("Access-Control-Expose-Headers", "xsrf-token");
 
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);

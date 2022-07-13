@@ -66,11 +66,18 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
+    public User getUserByName(String name) {
+        return userRepo.findByUsername(name);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByUsername(username);
         if (user == null) {
+            System.out.println("no user found");
             throw new UsernameNotFoundException("User not found");
         }
+        System.out.println(user.toString());
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));

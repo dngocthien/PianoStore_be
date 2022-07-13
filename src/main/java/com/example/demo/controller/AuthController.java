@@ -35,6 +35,11 @@ public class AuthController {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
+    @GetMapping("/users/{name}")
+    public ResponseEntity<User> getUserByName(@PathVariable String name) {
+        return ResponseEntity.ok().body(userService.getUserByName(name));
+    }
+
     @PostMapping("/users")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         return ResponseEntity.ok().body(userService.saveUser(user));

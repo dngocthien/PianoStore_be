@@ -23,7 +23,7 @@ public class CartController {
 	@Autowired
 	private CartService service;
 	
-	@PostMapping("/addCart")
+	@PostMapping("/carts")
 	public Cart addCart(@RequestBody Cart cart) {
 		return service.saveCart(cart);
 	}
@@ -38,18 +38,18 @@ public class CartController {
 		return service.getCartByName(name);
 	}
 	
-	@GetMapping("/cartByID/{id}")
+	@GetMapping("/carts/id/{id}")
 	public Cart findCartByID(@PathVariable int id) {
 		return service.getCartByID(id);
 	}
 	
-	@DeleteMapping("/deleteCart/{id}")
+	@DeleteMapping("/carts/{id}")
 	@Transactional
 	public String deleteCart(@PathVariable int id) {
 		return service.deleteCart(id);
 	}
 	
-	@PutMapping("/updateCart")
+	@PutMapping("/carts")
 	public Cart updateCart(@RequestBody Cart cart) {
 		return service.updateCart(cart);
 	}
