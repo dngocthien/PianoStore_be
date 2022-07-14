@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,23 +25,23 @@ public class CartController {
 	private CartService service;
 	
 	@PostMapping("/carts")
-	public Cart addCart(@RequestBody Cart cart) {
-		return service.saveCart(cart);
+	public ResponseEntity<Cart> addCart(@RequestBody Cart cart) {
+		return ResponseEntity.ok().body(service.saveCart(cart));
 	}
 	
 	@GetMapping("/carts")
-	public List<Cart> findAllCart() {
-		return service.getAllCart();
+	public ResponseEntity<List<Cart>> findAllCart() {
+		return ResponseEntity.ok().body(service.getAllCart());
 	}
 	
 	@GetMapping("/carts/{name}")
-	public List<Cart> findCartByName(@PathVariable String name) {
-		return service.getCartByName(name);
+	public ResponseEntity<List<Cart>> findCartByName(@PathVariable String name) {
+		return ResponseEntity.ok().body(service.getCartByName(name));
 	}
 	
 	@GetMapping("/carts/id/{id}")
-	public Cart findCartByID(@PathVariable int id) {
-		return service.getCartByID(id);
+	public ResponseEntity<Cart> findCartByID(@PathVariable int id) {
+		return ResponseEntity.ok().body(service.getCartByID(id));
 	}
 	
 	@DeleteMapping("/carts/{id}")
@@ -50,8 +51,8 @@ public class CartController {
 	}
 	
 	@PutMapping("/carts")
-	public Cart updateCart(@RequestBody Cart cart) {
-		return service.updateCart(cart);
+	public ResponseEntity<Cart> updateCart(@RequestBody Cart cart) {
+		return ResponseEntity.ok().body(service.updateCart(cart));
 	}
 
 }

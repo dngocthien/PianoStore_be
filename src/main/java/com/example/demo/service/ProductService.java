@@ -64,6 +64,10 @@ public class ProductService {
 		return brandRepo.findById(id).orElse(null);
 	}
 
+	public Brand getBrandByName(String name){
+		return brandRepo.findByName(name);
+	}
+
 	public List<Product> getCheapProducts(){
 		return repository.findCheap();
 	}

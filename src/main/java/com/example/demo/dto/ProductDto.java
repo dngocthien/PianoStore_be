@@ -12,6 +12,7 @@ public class ProductDto {
 	private String brand;
 	private int price;
 	private boolean remain;
+	private int discount;
 	private String image;
 	public ProductDto() {
 		super();

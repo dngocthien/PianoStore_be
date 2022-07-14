@@ -30,7 +30,7 @@ public class ProductController {
 
 	@PostMapping("/products")
 	public Product addProduct(@RequestParam("name") String name, @RequestParam("brand") int brand,
-			@RequestParam("price") int price, @RequestParam("remain") boolean remain,
+			@RequestParam("price") int price, @RequestParam("remain") boolean remain, @RequestParam("discount") int discount,
 			@RequestParam(value="file", required = false) MultipartFile file) throws IOException {
 
 		Product product = new Product();
@@ -39,6 +39,7 @@ public class ProductController {
 		product.setBrand(brand);
 		product.setPrice(price);
 		product.setRemain(remain);
+		product.setDiscount(discount);
 		if (file != null) {
 			product.setImage(file.getBytes());
 		}
@@ -87,14 +88,15 @@ public class ProductController {
 
 	@PutMapping("/products")
 	public Product updateProduct(@RequestParam("id") int id, @RequestParam("name") String name,
-			@RequestParam("brand") int brand, @RequestParam("price") int price,
-			@RequestParam("remain") boolean remain, @RequestParam( value="file", required = false) MultipartFile file) throws IOException {
+			@RequestParam("brand") String brand, @RequestParam("price") int price,
+			@RequestParam("remain") boolean remain, @RequestParam("discount") int discount, @RequestParam( value="file", required = false) MultipartFile file) throws IOException {
 
 		Product product = service.getProductByID(id);
 		product.setName(name);
-		product.setBrand(brand);
+		product.setBrand(service.getBrandByName(brand).getID());
 		product.setPrice(price);
 		product.setRemain(remain);
+		product.setDiscount(discount);
 		if (file != null) {
 			product.setImage(file.getBytes());
 		}
@@ -107,6 +109,7 @@ public class ProductController {
 			uri  = ServletUriComponentsBuilder.fromCurrentContextPath().path("/images/").path(product.getID()+"")
 					.toUriString();
 		}
-		return new ProductDto(product.getID() ,product.getName(), brandRepo.getById(product.getBrand()).getName() , product.getPrice(), product.isRemain(), uri);
+//		brandRepo.getById(product.getBrand()).getName()
+		return new ProductDto(product.getID() ,product.getName(), service.getBrandById(product.getBrand()).getName() , product.getPrice(), product.isRemain(), product.getDiscount(), uri);
 	}
 }

@@ -11,6 +11,6 @@ public interface CartRepository extends JpaRepository<Cart, Integer>{
 
 	List<Cart> findByNameContaining(String name);
 
-	@Query("SELECT c FROM Cart c ORDER BY c.date")
+	@Query("SELECT c FROM Cart c ORDER BY c.date DESC")
 	List<Cart> findAllByDate();
 }

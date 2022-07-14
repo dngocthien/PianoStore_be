@@ -15,6 +15,7 @@ public class Product {
 	private int brand;
 	private int price;
 	private boolean remain;
+	private int discount;
 	@Lob
 	private byte[] image;
 
