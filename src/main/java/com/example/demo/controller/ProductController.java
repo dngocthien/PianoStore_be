@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import com.example.demo.entity.Brand;
+import com.example.demo.repository.BrandRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,16 +25,18 @@ public class ProductController {
 
 	@Autowired
 	private ProductService service;
+	@Autowired
+	private BrandRepo brandRepo;
 
 	@PostMapping("/products")
-	public Product addProduct(@RequestParam("name") String name, @RequestParam("brand") String brand,
+	public Product addProduct(@RequestParam("name") String name, @RequestParam("brand") int brand,
 			@RequestParam("price") int price, @RequestParam("remain") boolean remain,
 			@RequestParam(value="file", required = false) MultipartFile file) throws IOException {
 
 		Product product = new Product();
 
 		product.setName(name.toUpperCase());
-		product.setBrand(brand.toUpperCase());
+		product.setBrand(brand);
 		product.setPrice(price);
 		product.setRemain(remain);
 		if (file != null) {
@@ -61,12 +65,12 @@ public class ProductController {
 
 	@Transactional
 	@GetMapping("/products/brand/{brand}")
-	public List<ProductDto> findProductByBrand(@PathVariable String brand) {
+	public List<ProductDto> findProductByBrand(@PathVariable int brand) {
 		return service.getProductByBrand(brand).stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
-	@GetMapping("/products/brands")
-	public List<String> findAllBrand() {
+	@GetMapping("/brands")
+	public List<Brand> findAllBrand() {
 		return service.getAllBrand();
 	}
 
@@ -83,7 +87,7 @@ public class ProductController {
 
 	@PutMapping("/products")
 	public Product updateProduct(@RequestParam("id") int id, @RequestParam("name") String name,
-			@RequestParam("brand") String brand, @RequestParam("price") int price,
+			@RequestParam("brand") int brand, @RequestParam("price") int price,
 			@RequestParam("remain") boolean remain, @RequestParam( value="file", required = false) MultipartFile file) throws IOException {
 
 		Product product = service.getProductByID(id);
@@ -103,6 +107,6 @@ public class ProductController {
 			uri  = ServletUriComponentsBuilder.fromCurrentContextPath().path("/images/").path(product.getID()+"")
 					.toUriString();
 		}
-		return new ProductDto(product.getID() ,product.getName(), product.getBrand(), product.getPrice(), product.getRemain(), uri);
+		return new ProductDto(product.getID() ,product.getName(), brandRepo.getById(product.getBrand()).getName() , product.getPrice(), product.isRemain(), uri);
 	}
 }

@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import com.example.demo.entity.Brand;
+import com.example.demo.repository.BrandRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class ProductService {
 
 	@Autowired
 	private ProductRepository repository;
+	@Autowired
+	private BrandRepo brandRepo;
 	
 	public Product saveProduct(Product product) {
 		return repository.save(product);
@@ -36,7 +40,7 @@ public class ProductService {
 		return repository.findByNameContaining(name);
 	}
 
-	public List<Product> getProductByBrand(String brand) {
+	public List<Product> getProductByBrand(int brand) {
 		return repository.findByBrand(brand);
 	}
 
@@ -52,8 +56,12 @@ public class ProductService {
 		return repository.save(existing);
 	}
 
-	public List<String> getAllBrand() {
-		return repository.findDistinctBrand();
+	public List<Brand> getAllBrand() {
+		return brandRepo.findAll();
+	}
+
+	public Brand getBrandById(int id){
+		return brandRepo.findById(id).orElse(null);
 	}
 
 	public List<Product> getCheapProducts(){

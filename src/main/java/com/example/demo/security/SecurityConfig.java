@@ -43,14 +43,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         customAuthFilter.setFilterProcessesUrl("/login/**");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/login/**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/login/**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/token/refresh").permitAll();
+        http.authorizeRequests().antMatchers("/**").permitAll();
 
-        http.authorizeRequests().antMatchers( "/images/**").permitAll();
-        http.authorizeRequests().antMatchers( "/users/**").permitAll();
-        http.authorizeRequests().antMatchers("/products/**").permitAll();
-        http.authorizeRequests().antMatchers( "/carts/**").permitAll();
+//        http.authorizeRequests().antMatchers(HttpMethod.POST, "/login/**").permitAll();
+//        http.authorizeRequests().antMatchers(HttpMethod.POST, "/token/refresh").permitAll();
+//        http.authorizeRequests().antMatchers( "/images/**").permitAll();
+//        http.authorizeRequests().antMatchers( "/users/**").permitAll();
+//        http.authorizeRequests().antMatchers("/products/**").permitAll();
+//        http.authorizeRequests().antMatchers( "/carts/**").permitAll();
 //        http.authorizeRequests().antMatchers( "/carts/**").hasAnyAuthority("ROLE_ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthFilter);

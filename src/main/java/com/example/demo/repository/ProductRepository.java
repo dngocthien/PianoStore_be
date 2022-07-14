@@ -13,14 +13,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 
 	Product findByName(String name);
 
-	List<Product> findByBrand(String brand);
+	List<Product> findByBrand(int brand);
 
 	List<Product> findByNameContaining(String name);
 
 	void deleteByName(String name);
-
-	@Query("SELECT DISTINCT brand FROM Product")
-	List<String> findDistinctBrand();
 
 	@Transactional
 	@Query("SELECT p FROM Product p WHERE p.price > 0 ORDER BY p.price")
