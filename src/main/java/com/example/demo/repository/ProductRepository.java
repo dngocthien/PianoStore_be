@@ -24,4 +24,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 	List<Product> findCheap();
 //	@Query(value="SELECT p from Product p ORDER BY p.price LIMIT 0, 8", nativeQuery = true)
 
+	@Transactional
+	@Query("SELECT p FROM Product p WHERE p.discount > 0 ORDER BY p.price")
+	List<Product> findDiscount();
+
 }

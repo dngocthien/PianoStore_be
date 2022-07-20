@@ -56,6 +56,18 @@ public class ProductService {
 		return repository.save(existing);
 	}
 
+	public List<Product> getCheapProducts(){
+		return repository.findCheap();
+	}
+
+	public List<Product> getDiscountProducts(){
+		return repository.findDiscount();
+	}
+
+    public Brand saveBrand(Brand brand) {
+		return  brandRepo.save(brand);
+    }
+
 	public List<Brand> getAllBrand() {
 		return brandRepo.findAll();
 	}
@@ -67,9 +79,4 @@ public class ProductService {
 	public Brand getBrandByName(String name){
 		return brandRepo.findByName(name);
 	}
-
-	public List<Product> getCheapProducts(){
-		return repository.findCheap();
-	}
-
 }

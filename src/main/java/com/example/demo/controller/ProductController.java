@@ -29,21 +29,29 @@ public class ProductController {
 	private BrandRepo brandRepo;
 
 	@PostMapping("/products")
-	public Product addProduct(@RequestParam("name") String name, @RequestParam("brand") int brand,
+	public Product addProduct(@RequestParam("name") String name, @RequestParam("brand") String brand,
 			@RequestParam("price") int price, @RequestParam("remain") boolean remain, @RequestParam("discount") int discount,
 			@RequestParam(value="file", required = false) MultipartFile file) throws IOException {
 
 		Product product = new Product();
+		int brandId;
+		Brand existing = service.getBrandByName(brand);
+		if(existing==null){
+			Brand brand1 = new Brand();
+			brand1.setName(brand.toUpperCase());
+			brandId = service.saveBrand(brand1).getID();
+		}else{
+			brandId = existing.getID();
+		}
 
 		product.setName(name.toUpperCase());
-		product.setBrand(brand);
+		product.setBrand(brandId);
 		product.setPrice(price);
 		product.setRemain(remain);
 		product.setDiscount(discount);
 		if (file != null) {
 			product.setImage(file.getBytes());
 		}
-
 		return service.saveProduct(product);
 	}
 
@@ -70,14 +78,14 @@ public class ProductController {
 		return service.getProductByBrand(brand).stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
-	@GetMapping("/brands")
-	public List<Brand> findAllBrand() {
-		return service.getAllBrand();
-	}
-
 	@GetMapping("/products/cheap")
 	public List<ProductDto> findCheapProducts() {
 		return service.getCheapProducts().stream().map(this::mapToFileResponse).collect(Collectors.toList());
+	}
+
+	@GetMapping("/products/discount")
+	public List<ProductDto> findDiscount() {
+		return service.getDiscountProducts().stream().map(this::mapToFileResponse).collect(Collectors.toList());
 	}
 
 	@DeleteMapping("/products/{name}")
@@ -109,7 +117,16 @@ public class ProductController {
 			uri  = ServletUriComponentsBuilder.fromCurrentContextPath().path("/images/").path(product.getID()+"")
 					.toUriString();
 		}
-//		brandRepo.getById(product.getBrand()).getName()
 		return new ProductDto(product.getID() ,product.getName(), service.getBrandById(product.getBrand()).getName() , product.getPrice(), product.isRemain(), product.getDiscount(), uri);
+	}
+
+	@GetMapping("/brands")
+	public List<Brand> findAllBrand() {
+		return service.getAllBrand();
+	}
+
+	@PostMapping("/brands")
+	public Brand saveBrand(@RequestBody Brand brand) {
+		return service.saveBrand(brand);
 	}
 }

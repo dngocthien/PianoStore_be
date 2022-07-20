@@ -17,14 +17,13 @@ public class MySqlTestApplication {
 		SpringApplication.run(MySqlTestApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner run(IUserService userService){
-		return args -> {
-//			userService.saveRole(new Role(null, "ROLE_ADMIN"));
-//			userService.saveUser(new Userr(null, "thien", "180897", new ArrayList<>()));
-//			userService.addRoleToUser("admin", "ROLE_ADMIN");
-//			userService.addRoleToUser("thien", "ROLE_ADMIN");
-//			System.out.println(userService.getUsers().toString());
-		};
-	}
+//	@Bean
+//	CommandLineRunner run(IUserService userService){
+//		return args -> {
+////			userService.saveRole(new Role(null, "ROLE_ADMIN"));
+////			userService.saveUser(new Userr(null, "thien", "180897", new ArrayList<>()));
+////			userService.addRoleToUser("thien", "ROLE_ADMIN");
+////			System.out.println(userService.getUsers().toString());
+//		};
+//	}
 }
